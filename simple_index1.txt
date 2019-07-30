@@ -1,6 +1,0 @@
-demADAD1_iR_A	CATTTTCTTGGGTCTGGATC	/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/files/ucsc.hg19.fa	GATC	GTAC	chr4
-demIL2_iR_A	GACAATAGGAATGTAAGATC	/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/files/ucsc.hg19.fa	GATC	GTAC	chr4
-demIL21_iR_A	ACCTCCAGAGCCAAAGGATC	/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/files/ucsc.hg19.fa	GATC	GTAC	chr4
-demKIAA1109_T1_iR_A	GAGCAGACGCCTCCAGGATC	/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/files/ucsc.hg19.fa	GATC	GTAC	chr4
-demKIAA1109_T2_iR_A	CCGCTCTCCCAGAGTCGATC	/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/files/ucsc.hg19.fa	GATC	CATG	chr4
-demMYC_iR_A	GGAGATGTGGGTGTATGATC	/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/files/ucsc.hg19.fa	GATC	CATG	chr8
