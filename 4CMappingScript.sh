@@ -1,20 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=135bp
-#SBATCH --time=11:59:00
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=40gb
-#SBATCH --nodes=1
-#SBATCH --open-mode=append
-#SBATCH --export=NONE
-#SBATCH --get-user-env=L
-
 
 ##Lists the current location to find all files, can be used in an install function
 ####Preset this to ensure proper working
-currentlocation=/groups/umcg-gdio/tmp04/umcg-ihidding/4C/peakC/PipelineWork
-Jaspardatafile=/groups/umcg-gdio/tmp04/umcg-ihidding/peakC/PipelineWork/Jasparbed/
-JasparMatrixInfo=/groups/umcg-gdio/tmp04/umcg-ihidding/peakC/PipelineWork/Jasparmatrix/
-
+currentlocation=/Path/to/install/location
+Jaspardatafile=/Path/to/JasparDatafile
+JasparMatrixInfo=/Path/to/Jasparmatrix/
+Rlibrary=/Path/To/R/Library
 
 #Help function, gives information on the used parameters and usability of the program
 ###################################HELP AND INFORMATION########################################################
@@ -42,17 +33,9 @@ EOH
         exit 0
 }
 ################################################################################################################
-#Prep and more prep, loading the required modules, sets the perl library to include inline::C and creates the output folder.
-################################################################################################################
-##Loads all required modules and adds the perl library to path.
+#Checks if the folders exists and creates them if they dont
+#################################################################################################################
 function Prepwork() {
-	#loading all the modules used in the prepwork and the mapping scripts 
-	module load cutadapt
-	module load BWA
-	module load PerlPlus
-	module load BEDTools
-	#Loads the perl library
-	export PERL5LIB=${currentlocation}/Requirements/perl5/lib/perl5/
 	if [ ! -d "${currentlocation}/4C_Output" ];
 	then
 		mkdir ${currentlocation}/4C_Output
@@ -66,7 +49,7 @@ function Prepwork() {
 
 	Jasparoutput=${output}/AnalysisOutput
 
-	PathToReferenceGenome=${currentlocation}/Requirements/
+	PathToReferenceGenome=${currentlocation}/
 
 	data=${currentlocation}/inputfiles
 
@@ -165,8 +148,7 @@ function RandAnalysis() {
 	echo "Rscriptstart"
 	#PeakC
 	###Initializing R
-	module load RPlus
-	export R_LIBS=~/Rlibs
+	export R_LIBS=${Rlibrary}
 	for viewpoint in $(cut -f1 ${input}); do
 
 		Pattern=${viewpoint}
@@ -241,11 +223,9 @@ function RandAnalysis() {
 #Installs Rlibrary, and packages
 ###########################################################################################################
 function Rprep() {
-	module load RPlus
-	mkdir ~/Rlibs
-        Rscript -e "install.packages('devtools', '~/Rlibs', 'http://ftp.ussg.iu.edu/CRAN')"
-        Rscript -e "install.packages('isotone', '~/Rlibs', 'http://ftp.ussg.iu.edu/CRAN')"
-        Rscript -e "install.packages('caTools', '~/Rlibs', 'http://ftp.ussg.iu.edu/CRAN')"
+        Rscript -e "install.packages('devtools', '${Rlibrary}', 'http://ftp.ussg.iu.edu/CRAN')"
+        Rscript -e "install.packages('isotone', '${Rlibrary}', 'http://ftp.ussg.iu.edu/CRAN')"
+        Rscript -e "install.packages('caTools', '${Rlibrary}', 'http://ftp.ussg.iu.edu/CRAN')"
         Rscript -e "devtools::install_github('deWitLab/peakC')"
 }
 ###########################################################################################################
@@ -253,9 +233,9 @@ function Rprep() {
 
 
 #main
-while getopts "i:h:wlr:" opt;
+while getopts "i:h:wlr" opt;
 do
-        case $opt in h)showHelp;; i)input="${OPTARG}";; w)Window="${OPTARG}";; l)LengthofWindow="${OPTARG}";; r)RPrep;;
+        case $opt in h)showHelp;; i)input="${OPTARG}";; w)Window="${OPTARG}";; l)LengthofWindow="${OPTARG}";; r)Rprep;;
         esac
 done
 if [[ -z "${input:-}" ]]; then showHelp ; echo "No input is given" ; fi
