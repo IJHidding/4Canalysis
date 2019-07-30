@@ -71,7 +71,7 @@ Note: This works with BASH only. Other shells will most likely have different wa
 
 These same steps have to be performed for bedtools, cutadapt, BWA-MEM and R. 
 
-Ensure the Jaspar folders and the install location are set in the first lines of the 4CMappingScript.sh file.
+Ensure the Jaspar folders, the R library location and the install location are set in the first lines of the 4CMappingScript.sh file.
 
 To run the analysis pipeline, create a folder in the same directory called "inputfiles", this is where all the fastq files from the 4C experiment are put.
 Then an input file is needed, the file requires 7 tabs in the following order:
@@ -90,7 +90,6 @@ Save this file as any name, as a .txt format.
 
 First run: $: sh 4CMappingscript -r
 To install the R package and required libraries.
-The R script installs into a library in your home ~/Rlibs/
 Then the pipeline is run by running: $: sh 4CMappingscript.sh -i Inputfile.txt.
 
 Demultiplexed fastq files can be found in the 4C_Output folder
