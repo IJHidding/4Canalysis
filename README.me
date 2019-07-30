@@ -1,0 +1,109 @@
+# 4C AnalysisPipeline
+This program demultiplexes, aligns and analyzes 4C data.
+This is done using Cutadapt for demultiplexing, BWA-MEM for alignment and the PeakC R package for the analysis, afterwards the found peaks are split into smaller peaks and this is compared with known transcription factor binding sites.
+
+Getting Started
+These instructions will get you a copy of the 4C Analysis Pipeline up and running on your local machine for analysis of 4C data.
+Download the repository from https://github.com/IJHidding/4Canalysis and unpack.
+Then follow instructions below to install the relevant databases.
+The Jaspar database location is required to be added to the code.
+It is advised to add bedtools, cutadapt, R and BWA-MEM to the permanent path.
+
+Jaspardatafile:
+from this link: http://jaspar.genereg.net/downloads/ go to other data and download the BED files for genomic coordinates of the sequences. 
+Unpack this file in its own folder on the preferred location. 
+Only the .bed files are required. 
+After downloading run : 
+rm *.sites
+and then
+grep -vl 'hg19' * | xargs rm
+In the folder containing the JASPAR bedfiles. 
+
+
+Jasparmatrixfile:
+The Matrixfile can be downloaded from http://jaspar.genereg.net/downloads/ , then under the JASPAR collections (PFMs) select the individual PFMs (zip) and download the Non-redundant CORE collection in JASPAR format.
+Unpack this file in its own folder on the preferred location 
+
+Then run this script on all the downloaded files.
+"
+#! bin/bash
+
+input=$1
+
+for file in $input; do
+        sed 's/\[*\]*//g' $file | tail -4 > tmp1
+        head -1 $file | cut -d$'\t' -f2 > tmp2
+        cat tmp1 tmp2 > $input
+	rm tmp*
+done
+"
+
+Prerequisites
+This version of the 4C Analysis Pipeline requires BEDTools v2.25.0
+Cutadapt v1.13
+BWA-MEM v0.7.15
+R v3.4.4
+Perl v5.22.o
+Perl Inline::C
+Ref genome: ucsc.hg19.fa
+Downloaded from: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/
+The file: hg19.fa.gz
+Unpack this file and rename it to: uscs.hg19.fa
+Then prepare an index with $:bwa index -a is uscs.hg19.fa
+Bedtools can be downloaded from:
+https://bedtools.readthedocs.io/en/latest/content/installation.html
+
+Installing
+
+Adding the 4C Analysis Pipeline to temp path:
+
+For one time use, or testing it is recommended to add the program to path temporarily. This is done by running:
+export PATH=$PATH:/path/to/directory/4CMappingScript.sh
+It is important to add execute rights to the Analysis  file, this is done by running: chmod +x 4CMappingScript.sh
+then test with echo $PATH and it should show at the end of the line.
+Then try running by running: 4CMappingScript.sh , and see if the help function appears.
+These functions will leave your path when the console is closed. If you won't be using IWAN more than a couple times it is not necessary to add it to path permanently. 
+
+Adding 4CMappingScript.sh to perm path:
+
+To add 4CMappingScript.sh to the perm path open the ~/.bashrc file, for example with nano (:nano ~/.bashrc) and simply add export PATH=$PATH:/path/to/directory/4CMappingScript.sh to the bottem of that file. 
+Note: This works with BASH only. Other shells will most likely have different ways to add to path permanently.  
+
+These same steps have to be performed for bedtools, cutadapt, BWA-MEM and R. 
+
+Ensure the Jaspar folders and the install location are set in the first lines of the 4CMappingScript.sh file.
+
+To run the analysis pipeline, create a folder in the same directory called "inputfiles", this is where all the fastq files from the 4C experiment are put.
+Then an input file is needed, the file requires 7 tabs in the following order:
+Column 1: Name of the viewpoint
+Column 2: Viewpoint primer
+Column 3: Path to the reference genome
+Column 4: The first restriction enzyme used in the experiment
+Column 5: The second restriction enzyme used in the experiment
+Column 6: The Chromosome for the viewpoint in format: "chr1"
+Column 7: The viewpoint location on the chromosome
+
+Example:
+Viewpoint	ACTGACTGACTGACTG	Path/to/reference/Genome/uscs.hg19.fa	GATC	GTAC	chr1	12345678
+
+Save this file as any name, as a .txt format. 
+
+First run: $: sh 4CMappingscript -r
+To install the R package and required libraries.
+The R script installs into a library in your home ~/Rlibs/
+Then the pipeline is run by running: $: sh 4CMappingscript.sh -i Inputfile.txt.
+
+Versioning
+This is version 1.0
+
+Authors
+Iwan J. Hidding - Initial work i.j.hidding@st.hanze.nl
+
+##License
+License information is available on the github page (https://github.com/IJHidding/4Canalysis) under LICENSE, COPYING and COPYING_LESSER.
+
+
+Acknowledgments
+Lennart Johansson for help with specific code and general guidance.
+Cleo van Diemen for general guidance. 
+
