@@ -93,6 +93,14 @@ To install the R package and required libraries.
 The R script installs into a library in your home ~/Rlibs/
 Then the pipeline is run by running: $: sh 4CMappingscript.sh -i Inputfile.txt.
 
+Demultiplexed fastq files can be found in the 4C_Output folder
+R output can be found in the 4C_Output/viewpoint folders, where viewpoint corresponds with the name in the input file. This folder contains the plot made by the PeakC package and the start locations of all fragments of the peaks.
+Sam/Bam/filtered text files can be found under 4C_Output/test_run/ folders
+The analysis output files can be found under the 4C_Output/AnalysisOutput folder.
+The split peaks can be found in the viewpoint.bed files and the finished analysis files are in the viewpoint_output.bed files.
+These files contain per line the window and a transcription factor that binds that region.
+Multiple lines can contain the same window, these combined form the full predicted region. With more lines corresponding to a higher likelyness of enhancer activity.
+
 Versioning
 This is version 1.0
 
